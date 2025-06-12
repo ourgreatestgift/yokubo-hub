@@ -1,199 +1,338 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Yokubo - Welcome</title>
-  <style>
-    /* Reset & Base */
-    * {
-      box-sizing: border-box;
-    }
-    body, html {
-      margin: 0; padding: 0;
-      height: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0a0a0a;
-      color: #eee;
-      overflow-y: scroll;
-      scroll-behavior: smooth;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yokubo - Horizontal Scroll Landing</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  /* Reset */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  html, body {
+    margin: 0; padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #0f111b;
+    color: #e0e8f9;
+    scroll-behavior: smooth;
+  }
+  body {
+    overflow-y: hidden; /* Hide vertical scroll */
+  }
 
-    /* Welcome Popup (Fullscreen) */
-    #welcome-popup {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(135deg, #ff416c, #ff4b2b);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 2rem;
-      z-index: 9999;
-      color: white;
-      font-weight: 700;
-      font-size: 2.5rem;
-      user-select: none;
-      transition: opacity 0.8s ease, visibility 0.8s ease;
-    }
-    #welcome-popup.hide {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-    #welcome-popup h1 {
-      font-size: 4rem;
-      margin-bottom: 0.5rem;
-      text-shadow: 0 0 12px #fff8;
-    }
-    #welcome-popup p {
-      font-size: 1.3rem;
-      margin-bottom: 3rem;
-      max-width: 480px;
-      line-height: 1.3;
-      text-shadow: 0 0 10px #fff4;
-    }
-    #welcome-popup button {
-      background: white;
-      color: #ff416c;
-      border: none;
-      border-radius: 30px;
-      padding: 1rem 3rem;
-      font-size: 1.3rem;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 0 20px #fff3;
-      transition: background 0.3s ease, color 0.3s ease;
-    }
-    #welcome-popup button:hover {
-      background: #ff4b2b;
-      color: white;
-      box-shadow: 0 0 30px #ff4b2b;
-    }
+  /* Top nav */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    background: rgba(15,17,27,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    z-index: 1000;
+    backdrop-filter: saturate(180%) blur(12px);
+    user-select: none;
+    box-shadow: 0 1px 10px rgb(20 24 34 / 0.75);
+  }
+  .logo {
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: #2ce2ff;
+    cursor: default;
+  }
+  nav {
+    display: flex;
+    gap: 32px;
+  }
+  nav a {
+    color: #99a9c6;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: color 0.3s ease;
+    cursor: pointer;
+  }
+  nav a:hover, nav a:focus {
+    color: #2ce2ff;
+    outline: none;
+  }
 
-    /* Main content below popup */
-    main {
-      margin-top: 100vh; /* Push content down offscreen behind popup */
-      padding: 3rem 1.5rem 6rem;
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
-      color: #ddd;
-      line-height: 1.5;
+  /* Horizontal scroll container */
+  main {
+    display: flex;
+    height: 100vh;
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  main::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Each section fills viewport */
+  section {
+    scroll-snap-align: start;
+    flex: 0 0 100vw;
+    height: 100vh;
+    padding: 120px 80px 60px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* Section backgrounds transparent for blob visibility */
+  section:nth-child(odd) {
+    background: rgba(15,17,27,0.75);
+  }
+  section:nth-child(even) {
+    background: rgba(15,17,27,0.9);
+  }
+
+  /* Titles */
+  h1 {
+    font-weight: 800;
+    font-size: 4rem;
+    letter-spacing: 0.15em;
+    line-height: 1.1;
+    margin: 0 0 16px 0;
+    color: #2ce2ff;
+  }
+  h2 {
+    font-weight: 700;
+    font-size: 2.2rem;
+    margin: 0 0 12px 0;
+    color: #66d3ff;
+  }
+
+  /* Paragraph text */
+  p {
+    max-width: 520px;
+    font-weight: 400;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: #bec9d9;
+  }
+  ul {
+    max-width: 520px;
+    color: #bec9d9;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    font-weight: 400;
+    margin-left: 1.25rem;
+  }
+  ul li {
+    margin-bottom: 8px;
+  }
+
+  /* Buttons */
+  .btn {
+    margin-top: 36px;
+    background: linear-gradient(90deg, #00d1ff, #0089ff);
+    border: none;
+    border-radius: 40px;
+    padding: 18px 56px;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #0a121f;
+    cursor: pointer;
+    box-shadow:
+      0 6px 12px rgb(0 209 255 / 0.55),
+      0 0 24px rgb(0 209 255 / 0.45);
+    user-select: none;
+    transition: box-shadow 0.3s ease;
+    align-self: flex-start;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn:hover, .btn:focus {
+    box-shadow:
+      0 10px 20px rgb(0 209 255 / 0.85),
+      0 0 36px rgb(0 209 255 / 0.7);
+    outline: none;
+  }
+
+  /* Animated blobs background */
+  #blob-background {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob {
+    position: absolute;
+    border-radius: 48% 52% 50% 50% / 52% 48% 52% 48%;
+    filter: blur(100px);
+    opacity: 0.6;
+    mix-blend-mode: screen;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+  .blob1 {
+    width: 480px;
+    height: 480px;
+    background: #00aaff;
+    top: 12%;
+    left: 10%;
+    animation-name: blob1move;
+    animation-duration: 20s;
+  }
+  .blob2 {
+    width: 420px;
+    height: 420px;
+    background: #1fd9bb;
+    top: 60%;
+    left: 38%;
+    animation-name: blob2move;
+    animation-duration: 25s;
+    animation-delay: 2s;
+  }
+  .blob3 {
+    width: 480px;
+    height: 480px;
+    background: #0047a3;
+    top: 28%;
+    left: 75%;
+    animation-name: blob3move;
+    animation-duration: 18s;
+    animation-delay: 1s;
+  }
+
+  @keyframes blob1move {
+    0%, 100% { transform: translate(0, 0) scale(1); border-radius: 48% 52% 50% 50% / 52% 48% 52% 48%; }
+    50% { transform: translate(40px, 50px) scale(1.15); border-radius: 52% 48% 54% 46% / 50% 52% 48% 50%; }
+  }
+  @keyframes blob2move {
+    0%, 100% { transform: translate(0, 0) scale(1); border-radius: 52% 48% 52% 48% / 48% 52% 48% 52%; }
+    50% { transform: translate(-30px, 35px) scale(1.1); border-radius: 50% 50% 48% 52% / 52% 48% 52% 48%; }
+  }
+  @keyframes blob3move {
+    0%, 100% { transform: translate(0, 0) scale(1); border-radius: 50% 50% 52% 48% / 48% 52% 50% 50%; }
+    50% { transform: translate(50px, -40px) scale(1.12); border-radius: 48% 52% 50% 50% / 50% 48% 52% 48%; }
+  }
+
+  /* Scrollbar for keyboard users */
+  main:focus {
+    outline: none;
+  }
+  main::-webkit-scrollbar {
+    height: 12px;
+  }
+  main::-webkit-scrollbar-thumb {
+    background: #2ce2ffcc;
+    border-radius: 6px;
+  }
+  main::-webkit-scrollbar-track {
+    background: #0f111b;
+  }
+
+  /* Responsive */
+  @media (max-width: 720px) {
+    header {
+      padding: 0 18px;
+    }
+    nav {
+      gap: 18px;
+    }
+    nav a {
+      font-size: 0.85rem;
+    }
+    section {
+      padding: 100px 24px 40px 24px;
+    }
+    h1 {
+      font-size: 2.8rem;
+    }
+    h2 {
+      font-size: 1.75rem;
+    }
+    p, ul {
+      font-size: 1rem;
+      max-width: 100%;
+    }
+    .btn {
+      padding: 14px 44px;
       font-size: 1.1rem;
     }
-
-    /* Scroll-triggered fade in */
-    .fade-in-section {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-      will-change: opacity, transform;
-      margin-bottom: 2rem;
-    }
-    .fade-in-section.is-visible {
-      opacity: 1;
-      transform: none;
-    }
-
-    /* Download button styled as a link */
-    #downloadBtn {
-      background: linear-gradient(90deg, #ff416c, #ff4b2b);
-      border: none;
-      padding: 1rem 3rem;
-      font-size: 1.5rem;
-      color: white;
-      font-weight: 700;
-      border-radius: 40px;
-      cursor: pointer;
-      box-shadow: 0 0 15px #ff416c88;
-      transition: box-shadow 1.5s ease-in-out infinite;
-      animation: pulseGlow 3s infinite;
-      margin: 2rem 0;
-      display: inline-block;
-      text-decoration: none;
-      text-align: center;
-    }
-    #downloadBtn:hover {
-      box-shadow: 0 0 30px #ff4b2bcc;
-    }
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 15px #ff416c88; }
-      50% { box-shadow: 0 0 30px #ff4b2bcc; }
-    }
-
-  </style>
+  }
+</style>
 </head>
 <body>
+  <div id="blob-background" aria-hidden="true">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+  </div>
 
-  <!-- Welcome Popup -->
-  <section id="welcome-popup" role="dialog" aria-modal="true" aria-labelledby="welcome-title" aria-describedby="welcome-desc">
-    <h1 id="welcome-title">Welcome to Yokubo</h1>
-    <p id="welcome-desc">Clean, fast, and feature-packed Roblox external.</p>
-    <button id="enterBtn" aria-label="Enter site and view download">Enter</button>
-  </section>
+  <header>
+    <div class="logo">YOKUBO</div>
+    <nav>
+      <a href="#section1" tabindex="1">Welcome</a>
+      <a href="#section2" tabindex="2">Features</a>
+      <a href="#section3" tabindex="3">Download</a>
+      <a href="#section4" tabindex="4">Support</a>
+    </nav>
+  </header>
 
-  <!-- Main content -->
-  <main>
-    <section class="fade-in-section">
-      <h2>What is Yokubo?</h2>
-      <p>Yokubo is a high-quality Roblox external tool designed to provide precision, speed, and the best user experience. Whether you're new or advanced, Yokubo helps you level up your game.</p>
+  <main tabindex="0" role="main" aria-label="Yokubo Horizontal Scroll Sections">
+    <section id="section1" aria-label="Welcome Section">
+      <h1>Welcome to Yokubo</h1>
+      <p>Your ultimate Roblox external loader with speed and security. Experience seamless launching and top-tier features designed just for you.</p>
+      <button class="btn" onclick="scrollToSection('section2')">Get Started</button>
     </section>
-    <section class="fade-in-section">
+
+    <section id="section2" aria-label="Features Section">
       <h2>Features</h2>
+      <p>Yokubo offers:</p>
       <ul>
-        <li>Precision Aimbot with smooth tracking</li>
-        <li>Clean and customizable UI</li>
-        <li>Fast and secure updates</li>
-        <li>Easy one-click download</li>
-        <li>Optimized for performance</li>
+        <li>⚡ Ultra-fast loader with minimal latency</li>
+        <li>🛡️ Built-in protection and anti-detection</li>
+        <li>🎯 Precision aimbot and ESP features</li>
+        <li>🔧 Easy-to-use GUI with full customization</li>
       </ul>
+      <button class="btn" onclick="scrollToSection('section3')">Explore Features</button>
     </section>
-    <section class="fade-in-section">
+
+    <section id="section3" aria-label="Download Section">
       <h2>Download</h2>
-      <a id="downloadBtn" href="Yokubo.exe" download aria-label="Download Yokubo external">Download Yokubo</a>
+      <p>Download the latest version of the Yokubo loader and get access to all features instantly. Safe and trusted by hundreds of users.</p>
+      <a href="./YokuboLoader.exe" download class="btn" aria-label="Download Yokubo Loader executable">Download Loader</a>
     </section>
-    <section class="fade-in-section">
-      <h2>Need Help?</h2>
-      <p>Join our Discord for support, updates, and community events.</p>
-      <a href="https://discord.gg/yokubo" target="_blank" rel="noopener" style="color:#ff4b2b; font-weight: 700; text-decoration: none;">Join Discord</a>
+
+    <section id="section4" aria-label="Support Section">
+      <h2>Support</h2>
+      <p>Need help or have questions? Join our Discord community or contact our support team for quick assistance.</p>
+      <p>
+        <a href="https://discord.gg/yokubo" target="_blank" rel="noopener noreferrer" style="color:#2ce2ff; font-weight:700;">Discord Server</a><br/>
+        <a href="mailto:support@yokubo.com" style="color:#2ce2ff; font-weight:700;">support@yokubo.com</a>
+      </p>
     </section>
   </main>
 
   <script>
-    // Handle welcome popup dismissal and scroll to download
-    const welcomePopup = document.getElementById('welcome-popup');
-    const enterBtn = document.getElementById('enterBtn');
+    // Smooth scroll horizontal helper for buttons
+    function scrollToSection(id) {
+      const section = document.getElementById(id);
+      if(section) {
+        section.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'start'});
+      }
+    }
 
-    enterBtn.addEventListener('click', () => {
-      welcomePopup.classList.add('hide');
-      const downloadSection = document.getElementById('downloadBtn');
-      setTimeout(() => {
-        downloadSection.scrollIntoView({ behavior: 'smooth' });
-      }, 500); // Matches fade duration
-    });
-
-    // Scroll-triggered fade in for main content
-    const faders = document.querySelectorAll('.fade-in-section');
-    const options = {
-      threshold: 0.15,
-      rootMargin: "0px 0px -50px 0px"
-    };
-
-    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
-      entries.forEach(entry => {
-        if(entry.isIntersecting){
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
+    // Optional: fix nav links smooth horizontal scroll behavior (some browsers default vertical)
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href').slice(1);
+        scrollToSection(targetId);
       });
-    }, options);
-
-    faders.forEach(fader => {
-      appearOnScroll.observe(fader);
     });
   </script>
-
 </body>
 </html>
