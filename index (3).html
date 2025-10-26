@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="Yokubo — External Aim & ESP Suite: a professional-grade precision toolset for advanced players and testers." />
+    <meta name="keywords" content="Yokubo, aimbot, esp, external, cheats, gaming, exploits" />
+    <meta name="author" content="Yokubo Team" />
+    <title>Yokubo — External Aim & ESP Suite</title>
+
+    <!-- Tailwind (kept similar to original, v2 CDN used for compatibility) -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        :root{
+            --bg-900: #05060a;
+            --bg-800: #0b0c10;
+            --panel: rgba(255,255,255,0.03);
+            --glass: rgba(255,255,255,0.04);
+            --accent: linear-gradient(90deg,#6ee7b7,#60a5fa);
+            --muted: rgba(255,255,255,0.55);
+        }
+
+        html,body {
+            background: radial-gradient(1200px 600px at 10% 10%, rgba(40,44,52,0.25), transparent),
+                        radial-gradient(800px 400px at 90% 90%, rgba(60,50,90,0.18), transparent),
+                        var(--bg-900);
+            color: #e6eef8;
+            height: 100%;
+            margin: 0;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* glass panels */
+        .glass {
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.04);
+            box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+            backdrop-filter: blur(8px) saturate(120%);
+        }
+
+        /* hero */
+        .hero {
+            min-height: 80vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding: 4rem 1rem;
+        }
+
+        .logo-badge {
+            display:inline-flex;
+            align-items:center;
+            gap:.6rem;
+            padding:.4rem .8rem;
+            border-radius:999px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.03);
+            font-weight:600;
+            color:#bfe9d7;
+        }
+
+        h1.title {
+            font-size: clamp(2rem, 3.6vw, 3.4rem);
+            line-height:1.02;
+            margin:0;
+            font-weight:800;
+            letter-spacing:-0.02em;
+            background: -webkit-linear-gradient(90deg,#9be7c4,#7fb7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.lead {
+            color: var(--muted);
+            margin-top:.6rem;
+            font-size:1.05rem;
+        }
+
+        /* nav */
+        header nav {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 60;
+            width: min(1100px, calc(100% - 2rem));
+            display:flex;
+            justify-content:center;
+        }
+        .nav-inner {
+            display:flex;
+            gap:1.2rem;
+            padding:.5rem .9rem;
+            align-items:center;
+            border-radius:999px;
+        }
+        .nav-inner a {
+            color: rgba(230,238,248,0.85);
+            font-weight:600;
+            padding:.45rem .65rem;
+            border-radius:8px;
+            transition: all .18s;
+            text-decoration:none;
+        }
+        .nav-inner a:hover { background: rgba(255,255,255,0.02); transform:translateY(-2px) }
+
+        /* features layout */
+        .features { padding: 4rem 1rem; }
+        .features-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap:1.25rem; }
+
+        .feature-card {
+            padding:1.25rem;
+            border-radius:16px;
+            min-height:120px;
+        }
+
+        .feature-title { font-weight:700; font-size:1.05rem; margin-bottom:.3rem; color:#dff7ef }
+        .feature-desc { color: var(--muted); font-size:.95rem }
+
+        /* hero CTA */
+        .cta {
+            display:inline-flex;
+            gap:.75rem;
+            align-items:center;
+            margin-top:1.25rem;
+        }
+        .btn {
+            display:inline-flex;
+            align-items:center;
+            gap:.6rem;
+            padding:.6rem .95rem;
+            border-radius:12px;
+            font-weight:700;
+            cursor:pointer;
+            text-decoration:none;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg,#60a5fa,#6ee7b7);
+            color:#041025;
+            box-shadow: 0 10px 30px rgba(96,165,250,0.12);
+            border:none;
+        }
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.06);
+            color: #cfe8ff;
+        }
+
+        /* testimonials */
+        .testimonial { padding:1rem; border-radius:12px; }
+
+        /* stats */
+        .stat-num { font-weight:800; font-size:2rem; color: #bff1dc; }
+
+        /* small UI niceties */
+        .program-img { border-radius: 12px; max-width:380px; box-shadow: 0 18px 50px rgba(2,6,23,0.6) }
+        .section-title { font-size:1.75rem; font-weight:800; margin-bottom:1rem; color:#e8fbf0 }
+
+        footer { padding:2.25rem 1rem; text-align:center; color: rgba(255,255,255,0.5); border-top: 1px solid rgba(255,255,255,0.02); margin-top:2.5rem; }
+
+        /* small responsive tweaks */
+        @media (max-width:768px){
+            .hero { padding:2.5rem 1rem }
+            .program-img { display:none }
+        }
+    </style>
+</head>
+<body>
+    <!-- nav -->
+    <header>
+        <nav class="glass nav-inner mx-auto">
+            <div class="logo-badge">Yokubo</div>
+            <a href="#home">Home</a>
+            <a href="#features">Features</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#stats">Stats</a>
+            <a href="#download">Download</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <main>
+        <section id="home" class="hero">
+            <div class="container mx-auto px-6 text-center max-w-5xl">
+                <div class="glass p-8 rounded-2xl flex items-center gap-8 justify-between flex-wrap">
+                    <div style="flex:1; min-width:280px">
+                        <div style="display:flex; align-items:center; gap:.75rem">
+                            <div class="logo-badge">Yokubo</div>
+                            <div style="color:var(--muted); font-weight:600">External Suite · Precision Tools</div>
+                        </div>
+
+                        <h1 class="title mt-4">Yokubo — External Aim & ESP Suite</h1>
+                        <p class="lead">Professional-grade external utilities for precision testing and competitive tuning — Silent Aim, Aimbot, ESP and more, built with stability and configurability in mind.</p>
+
+                        <div class="cta">
+                            <a href="#download" class="btn btn-primary">Download</a>
+                            <a class="btn btn-ghost" href="#features">View Features</a>
+                        </div>
+
+                        <div style="margin-top:1rem; color:var(--muted); font-size:.92rem">Join our Discord to stay updated on releases and downtime alerts.</div>
+                    </div>
+
+                    <div style="flex:0 0 420px; text-align:center">
+                        <img src="https://github.com/ourgreatestgift/Yokubo-Downloads/blob/main/yokubocheatpic.png?raw=true" alt="Yokubo UI preview" class="program-img">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES -->
+        <section id="features" class="features">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <h2 class="section-title">Core Features</h2>
+                <p style="color:var(--muted); margin-bottom:1rem">Powerful, configurable options for users who demand precision and reliability.</p>
+
+                <div class="features-grid">
+                    <div class="glass feature-card">
+                        <div class="feature-title">Silent Aim</div>
+                        <div class="feature-desc">Subtle targeting adjustments designed for smooth, unobtrusive aim correction.</div>
+                    </div>
+
+                    <div class="glass feature-card">
+                        <div class="feature-title">Aimbot (Camlock, Mouse Lock)</div>
+                        <div class="feature-desc">Camera lock and mouse lock modes with adjustable smoothness and target prioritization.</div>
+                    </div>
+
+                    <div class="glass feature-card">
+                        <div class="feature-title">WalkSpeed</div>
+                        <div class="feature-desc">Fine-grained movement speed control for testing and mobility tuning.</div>
+                    </div>
+
+                    <div class="glass feature-card">
+                        <div class="feature-title">ESP (Boxes, Healthbar, Names, Item)</div>
+                        <div class="feature-desc">Comprehensive visuals including boxes, health overlays, player names and item highlights.</div>
+                    </div>
+
+                    <div class="glass feature-card">
+                        <div class="feature-title">Hitbox Expander — With Arsenal Support</div>
+                        <div class="feature-desc">Expand hitboxes selectively; includes explicit compatibility for Arsenal-type systems.</div>
+                    </div>
+
+                    <div class="glass feature-card">
+                        <div class="feature-title">Auto Caching</div>
+                        <div class="feature-desc">Automatic asset and data caching for faster startup and smoother operation.</div>
+                    </div>
+
+                    <div class="glass feature-card">
+                        <div class="feature-title">Triggerbot</div>
+                        <div class="feature-desc">Automatic fire when targets enter crosshair zone, configurable delay and conditions.</div>
+                    </div>
+
+                    <div class="glass feature-card">
+                        <div class="feature-title">Fly</div>
+                        <div class="feature-desc">Controlled flight toggles for testing vertical movement and collision states.</div>
+                    </div>
+
+                    <div class="glass feature-card">
+                        <div class="feature-title">JumpPower</div>
+                        <div class="feature-desc">Adjust jump strength for testing physics and traversal scenarios.</div>
+                    </div>
+
+                    <div class="glass feature-card">
+                        <div class="feature-title">More</div>
+                        <div class="feature-desc">A modular architecture — additional tools and toggles added regularly.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIALS -->
+        <section id="testimonials" class="py-12">
+            <div class="container mx-auto px-6 max-w-4xl">
+                <h2 class="section-title">What Our Users Say</h2>
+                <div class="space-y-4">
+                    <div class="glass testimonial p-4">
+                        <p style="margin:0; color:var(--muted)">"Yokubo is stable and configurable — exactly what our QA team needed for tunable testing."</p>
+                        <div style="text-align:right; font-weight:700; margin-top:.5rem">— QA Lead</div>
+                    </div>
+
+                    <div class="glass testimonial p-4">
+                        <p style="margin:0; color:var(--muted)">"Powerful feature set and minimal overhead. Clean, professional tooling."</p>
+                        <div style="text-align:right; font-weight:700; margin-top:.5rem">— Beta Tester</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STATS -->
+        <section id="stats" class="py-12">
+            <div class="container mx-auto px-6 max-w-4xl">
+                <h2 class="section-title">Impact & Reach</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                    <div class="glass p-6 text-center">
+                        <div class="stat-num">500K+</div>
+                        <div style="color:var(--muted)">Downloads</div>
+                    </div>
+                    <div class="glass p-6 text-center">
+                        <div class="stat-num">100K+</div>
+                        <div style="color:var(--muted)">Active Users</div>
+                    </div>
+                    <div class="glass p-6 text-center">
+                        <div class="stat-num">50+</div>
+                        <div style="color:var(--muted)">Countries</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DOWNLOAD -->
+        <section id="download" class="py-12">
+            <div class="container mx-auto px-6 max-w-4xl text-center">
+                <h2 class="section-title">Get Yokubo</h2>
+                <p style="color:var(--muted)">Compatible with many popular roblox titles. Use responsibly — for testing and private use.</p>
+                <div style="margin-top:1rem">
+<a class="btn btn-primary" href="https://github.com/ourgreatestgift/Yokubo-Downloads/raw/refs/heads/main/Cheat.exe" download>Download</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container mx-auto px-6 max-w-4xl">
+            <div style="margin-bottom:.5rem">© 2025 Yokubo. All rights reserved.</div>
+            <div style="color:var(--muted); font-size:.9rem">This software is provided "as-is" for private testing and research. Use responsibly and follow platform rules.</div>
+        </div>
+    </footer>
+
+    <!-- particles (kept lightweight) -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // lightweight particles for atmosphere
+        if (window.particlesJS) {
+            particlesJS('particles', {
+                particles: {
+                    number: { value: 18, density: { enable: true, value_area: 800 } },
+                    color: { value: '#6ee7b7' },
+                    shape: { type: 'circle' },
+                    opacity: { value: 0.12, random: true },
+                    size: { value: 4, random: true },
+                    line_linked: { enable: false },
+                    move: { enable: true, speed: 1.2, random: true }
+                },
+                interactivity: {
+                    detect_on: 'canvas',
+                    events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: false } },
+                    modes: { repulse: { distance: 100, duration: 0.4 } }
+                }
+            });
+        }
+    </script>
+
+    <div id="particles" style="position:fixed; inset:0; z-index:-1;"></div>
+<!-- Add this just before </body> -->
+<a href="https://discord.gg/xKj38dkEhr" target="_blank" id="discord-button" class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-indigo-500 to-green-400 text-white shadow-lg transform transition-transform duration-500 animate-pulse hover:scale-110" title="Join our Discord for updates!">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="32" height="32">
+        <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.0371 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1201.099.246.1971.3728.2914a.077.077 0 01-.0065.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1062c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6618a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1568-1.0857-2.1568-2.419 0-1.3332.9554-2.4189 2.1568-2.4189 1.2108 0 2.1757 1.0952 2.1569 2.419 0 1.3332-.9461 2.4189-2.1569 2.4189z"/>
+    </svg>
+</a>
+
+<style>
+    #discord-button {
+        animation: pulseBounce 1.5s infinite;
+    }
+    @keyframes pulseBounce {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+</style>
+</body>
+</html>
